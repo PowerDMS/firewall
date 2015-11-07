@@ -1,10 +1,6 @@
 include_recipe 'chef-sugar'
 include_recipe 'firewall'
 
-firewall 'default' do
-  action :install
-end
-
 firewall_rule 'ssh22' do
   port 22
   command :allow
