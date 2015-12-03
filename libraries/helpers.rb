@@ -1,5 +1,7 @@
 module FirewallCookbook
   module Helpers
+    include Chef::Sugar::PlatformFamily
+    
     def dport_calc(new_resource)
       new_resource.dest_port || new_resource.port
     end
@@ -9,6 +11,8 @@ module FirewallCookbook
         p.to_s
       elsif p && p.is_a?(Array)
         p.sort.join(',')
+      elsif p && p.is_a?(Range) && windows?
+        "#{p.first}-#{p.last}"
       elsif p && p.is_a?(Range)
         "#{p.first}:#{p.last}"
       end
