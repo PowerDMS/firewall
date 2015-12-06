@@ -1,6 +1,6 @@
 module FirewallCookbook
   module Helpers
-    include Chef::Sugar::PlatformFamily
+    include ::Chef::Sugar::PlatformFamily
     
     def dport_calc(new_resource)
       new_resource.dest_port || new_resource.port
