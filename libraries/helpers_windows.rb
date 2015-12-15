@@ -65,16 +65,16 @@ module FirewallCookbook
 
         if new_resource.direction.to_sym == :out
           parameters['localip'] = new_resource.source ? fixup_cidr(new_resource.source) : 'any'
-          parameters['localport'] = new_resource.source_port ? port_to_s(new_resource.source_port) : 'any'
+          parameters['localport'] = new_resource.source_port ? port_to_s(new_resource.source_port) : 'any' unless new_resource.protocol == 'icmpv4'
           parameters['interfacetype'] = new_resource.source_interface ? new_resource.source_interface : 'any'
           parameters['remoteip'] = new_resource.destination ? fixup_cidr(new_resource.destination) : 'any'
-          parameters['remoteport'] = port_to_s(new_resource.dest_port) ? new_resource.dest_port : 'any'
+          parameters['remoteport'] = port_to_s(new_resource.dest_port) ? new_resource.dest_port : 'any' unless new_resource.protocol == 'icmpv4'
         else
           parameters['localip'] = new_resource.destination ? new_resource.destination : 'any'
-          parameters['localport'] = dport_calc(new_resource) ? port_to_s(dport_calc(new_resource)) : 'any'
+          parameters['localport'] = dport_calc(new_resource) ? port_to_s(dport_calc(new_resource)) : 'any' unless new_resource.protocol == 'icmpv4'
           parameters['interfacetype'] = new_resource.dest_interface ? new_resource.dest_interface : 'any'
           parameters['remoteip'] = new_resource.source ? fixup_cidr(new_resource.source) : 'any'
-          parameters['remoteport'] = new_resource.source_port ? port_to_s(new_resource.source_port) : 'any'
+          parameters['remoteport'] = new_resource.source_port ? port_to_s(new_resource.source_port) : 'any' unless new_resource.protocol == 'icmpv4'
         end
 
         parameters['action'] = type.to_s
