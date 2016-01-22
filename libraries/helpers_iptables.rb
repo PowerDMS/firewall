@@ -15,9 +15,9 @@ module FirewallCookbook
         else
           firewall_rule = ' '
 
-          if [:pre, :post].include?(rule_resource.direction)
-            firewall_rule << '-t nat '
-          end
+          #if [:pre, :post].include?(rule_resource.direction)
+          #  firewall_rule << '-t nat '
+          #end
 
           if rule_resource.direction
             firewall_rule << "-A #{CHAIN[rule_resource.direction.to_sym]} "
