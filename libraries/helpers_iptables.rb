@@ -13,15 +13,16 @@ module FirewallCookbook
         if rule_resource.raw
           firewall_rule = rule_resource.raw.strip
         else
-          firewall_rule = '-A '
-          if rule_resource.direction
-            firewall_rule << "#{CHAIN[rule_resource.direction.to_sym]} "
-          else
-            firewall_rule << 'FORWARD '
-          end
+          firewall_rule = ' '
 
           if [:pre, :post].include?(rule_resource.direction)
             firewall_rule << '-t nat '
+          end
+
+          if rule_resource.direction
+            firewall_rule << "-A #{CHAIN[rule_resource.direction.to_sym]} "
+          else
+            firewall_rule << '-A FORWARD '
           end
 
 #  iptables -t nat -A POSTROUTING -o eth0 -p tcp -d 10.200.110.21 -j SNAT --to-source 10.200.110.6
@@ -50,8 +51,8 @@ module FirewallCookbook
           firewall_rule << "-j #{TARGET[rule_resource.command.to_sym]} "
 
           # Adding to-source for iptables -t nat type of rules
-          firewall_rule << "--to-source #{rule_resource.to_source}" if rule_resource.command == :snat
-          
+          firewall_rule << "--to-source #{rule_resource.to_source} " if rule_resource.command == :snat
+
           firewall_rule << "--to-ports #{rule_resource.redirect_port} " if rule_resource.action == :redirect
           firewall_rule.strip!
 
@@ -99,11 +100,16 @@ module FirewallCookbook
 
       def default_ruleset(current_node)
         {
-          '*filter' => 1,
-          ":INPUT #{current_node['firewall']['iptables']['defaults'][:policy][:input]}" => 2,
-          ":FORWARD #{current_node['firewall']['iptables']['defaults'][:policy][:forward]}" => 3,
-          ":OUTPUT #{current_node['firewall']['iptables']['defaults'][:policy][:output]}" => 4,
-          'COMMIT' => 100
+          '*nat' => 1,
+          ':PREROUTING ACCEPT' => 2,
+          ':POSTROUTING ACCEPT' => 3,
+          ':OUTPUT ACCEPT' => 4,
+          'COMMIT' => 200,
+          '*filter' => 201,
+          ":INPUT #{current_node['firewall']['iptables']['defaults'][:policy][:input]}" => 202,
+          ":FORWARD #{current_node['firewall']['iptables']['defaults'][:policy][:forward]}" => 203,
+          ":OUTPUT #{current_node['firewall']['iptables']['defaults'][:policy][:output]}" => 204,
+          'COMMIT' => 300
         }
       end
 
