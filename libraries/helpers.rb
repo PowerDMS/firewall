@@ -74,6 +74,9 @@ module FirewallCookbook
         contents << "# position #{sorted_value}"
         rules.each do |k, v|
           next unless v == sorted_value
+          if k.include?("COMMIT_")
+            k = "COMMIT"
+          end
           contents << k
         end
       end

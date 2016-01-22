@@ -104,12 +104,12 @@ module FirewallCookbook
           ':PREROUTING ACCEPT' => 2,
           ':POSTROUTING ACCEPT' => 3,
           ':OUTPUT ACCEPT' => 4,
-          'COMMIT' => 100,
+          'COMMIT_NAT' => 100,
           '*filter' => 101,
           ":INPUT #{current_node['firewall']['iptables']['defaults'][:policy][:input]}" => 102,
           ":FORWARD #{current_node['firewall']['iptables']['defaults'][:policy][:forward]}" => 103,
-          ":OUTPUT #{current_node['firewall']['iptables']['defaults'][:policy][:output]}" => 104,
-          'COMMIT' => 200
+          ":OUTPUT #{current_node['firewall']['iptables']['defaults'][:policy][:output]}" => 104
+          'COMMIT_FILTER' => 200
         }
       end
 
