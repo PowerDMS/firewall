@@ -108,7 +108,7 @@ module FirewallCookbook
           '*filter' => 101,
           ":INPUT #{current_node['firewall']['iptables']['defaults'][:policy][:input]}" => 102,
           ":FORWARD #{current_node['firewall']['iptables']['defaults'][:policy][:forward]}" => 103,
-          ":OUTPUT #{current_node['firewall']['iptables']['defaults'][:policy][:output]}" => 104
+          ":OUTPUT #{current_node['firewall']['iptables']['defaults'][:policy][:output]}" => 104,
           'COMMIT_FILTER' => 200
         }
       end
