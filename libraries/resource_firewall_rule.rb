@@ -31,7 +31,9 @@ class Chef
     attribute(:dest_port, kind_of: [Integer, Array, Range])
     attribute(:dest_interface, kind_of: String)
 
-    attribute(:position, kind_of: Integer, default: 50)
+
+    attribute(:nat_position, kind_of: Integer, default: 50)
+    attribute(:position, kind_of: Integer, default: 150)
     attribute(:stateful, kind_of: [Symbol, Array])
     attribute(:redirect_port, kind_of: Integer)
     attribute(:description, kind_of: String, name_attribute: true)
