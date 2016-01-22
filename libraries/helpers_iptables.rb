@@ -5,7 +5,7 @@ module FirewallCookbook
       include Chef::Mixin::ShellOut
 
       CHAIN = { in: 'INPUT', out: 'OUTPUT', pre: 'PREROUTING', post: 'POSTROUTING' } unless defined? CHAIN # , nil => "FORWARD"}
-      TARGET = { allow: 'ACCEPT', reject: 'REJECT', deny: 'DROP', masquerade: 'MASQUERADE', redirect: 'REDIRECT', log: 'LOG --log-prefix "iptables: " --log-level 7' } unless defined? TARGET
+      TARGET = { allow: 'ACCEPT', reject: 'REJECT', deny: 'DROP', masquerade: 'MASQUERADE', redirect: 'REDIRECT', log: 'LOG --log-prefix "iptables: " --log-level 7', snat: 'SNAT' } unless defined? TARGET
 
       def build_firewall_rule(current_node, rule_resource, ipv6 = false)
         el5 = (current_node['platform'] == 'rhel' || current_node['platform'] == 'centos') && Gem::Dependency.new('', '~> 5.0').match?('', current_node['platform_version'])
@@ -23,6 +23,8 @@ module FirewallCookbook
           if [:pre, :post].include?(rule_resource.direction)
             firewall_rule << '-t nat '
           end
+
+#  iptables -t nat -A POSTROUTING -o eth0 -p tcp -d 10.200.110.21 -j SNAT --to-source 10.200.110.6
 
           # Iptables order of prameters is important here see example output below:
           # -A INPUT -s 1.2.3.4/32 -d 5.6.7.8/32 -i lo -p tcp -m tcp -m state --state NEW -m comment --comment "hello" -j DROP
@@ -46,6 +48,10 @@ module FirewallCookbook
           end
 
           firewall_rule << "-j #{TARGET[rule_resource.command.to_sym]} "
+
+          # Adding to-source for iptables -t nat type of rules
+          firewall_rule << "--to-source #{rule_resource.to_source}" if rule_resource.command == :snat
+          
           firewall_rule << "--to-ports #{rule_resource.redirect_port} " if rule_resource.action == :redirect
           firewall_rule.strip!
 
