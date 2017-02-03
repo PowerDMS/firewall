@@ -1,6 +1,6 @@
 default['firewall']['iptables']['defaults'] = {
   policy: {
-    input: 'ACCEPT',
+    input: 'DROP',
     forward: 'DROP',
     output: 'ACCEPT'
   }
