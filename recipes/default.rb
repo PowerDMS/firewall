@@ -30,8 +30,7 @@ iptables_firewall = rhel? || node['firewall']['ubuntu_iptables'] || (node['platf
 firewall_rule 'allow world to ssh' do
   port 22
   source '0.0.0.0/0'
-  not_if { windows? }
-  only_if { node['firewall']['allow_ssh'] }
+  only_if { linux? && node['firewall']['allow_ssh'] }
 end
 
 firewall_rule 'allow world to winrm' do
