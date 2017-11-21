@@ -15,7 +15,7 @@ supports 'redhat'
 supports 'scientific'
 supports 'ubuntu'
 
-depends 'chef-sugar', '=3.5.0'
+depends 'chef-sugar', '<=3.5.0'
 
 source_url 'https://github.com/chef-cookbooks/firewall' if respond_to?(:source_url)
 issues_url 'https://github.com/chef-cookbooks/firewall/issues' if respond_to?(:issues_url)
