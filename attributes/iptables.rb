@@ -10,9 +10,9 @@ default['firewall']['iptables']['defaults'][:ruleset] = {
 	':OUTPUT ACCEPT' => 4,
 	'COMMIT_NAT' => 100,
 	'*filter' => 101,
-	":INPUT #{current_node['firewall']['iptables']['defaults'][:policy][:input]}" => 102,
-	":FORWARD #{current_node['firewall']['iptables']['defaults'][:policy][:forward]}" => 103,
-	":OUTPUT #{current_node['firewall']['iptables']['defaults'][:policy][:output]}" => 104,
+	":INPUT #{node['firewall']['iptables']['defaults'][:policy][:input]}" => 102,
+	":FORWARD #{node['firewall']['iptables']['defaults'][:policy][:forward]}" => 103,
+	":OUTPUT #{node['firewall']['iptables']['defaults'][:policy][:output]}" => 104,
 	'COMMIT_FILTER' => 200
 }
 
