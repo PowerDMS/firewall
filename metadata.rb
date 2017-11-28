@@ -11,7 +11,7 @@ supports 'debian'
 supports 'ubuntu'
 supports 'windows'
 
-depends 'chef-sugar', '=3.5.0' # 3.6.0 depends on newer version of ruby
+depends 'chef-sugar', '<=3.5.0' # 3.6.0 depends on newer version of ruby
 
 source_url 'https://github.com/chef-cookbooks/firewall'
 issues_url 'https://github.com/chef-cookbooks/firewall/issues'
