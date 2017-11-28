@@ -11,7 +11,7 @@ class Chef
 
     attribute(:firewall_name, kind_of: String, default: 'default')
 
-    attribute(:command, kind_of: Symbol, equal_to: [:reject, :allow, :deny, :masquerade, :redirect, :log], default: :allow)
+    attribute(:command, kind_of: Symbol, equal_to: [:reject, :allow, :deny, :masquerade, :redirect, :log, :snat], default: :allow)
 
     attribute(:protocol, kind_of: [Integer, Symbol], default: :tcp,
                          callbacks: { 'must be either :tcp, :udp, :icmp, :\'ipv6-icmp\', :icmpv6, :none, or a valid IP protocol number' => lambda do |p|
@@ -29,7 +29,8 @@ class Chef
     attribute(:dest_port, kind_of: [Integer, Array, Range])
     attribute(:dest_interface, kind_of: String)
 
-    attribute(:position, kind_of: Integer, default: 50)
+    attribute(:nat_position, kind_of: Integer, default: 50)
+    attribute(:position, kind_of: Integer, default: 150)
     attribute(:stateful, kind_of: [Symbol, Array])
     attribute(:redirect_port, kind_of: Integer)
     attribute(:description, kind_of: String, name_attribute: true)
@@ -40,6 +41,9 @@ class Chef
     # only used for Windows Firewalls
     attribute(:program, kind_of: String)
     attribute(:service, kind_of: String)
+
+    # --to-source option for nat in iptables
+    attribute(:to_source, kind_of: String)
 
     # for when you just want to pass a raw rule
     attribute(:raw, kind_of: String)

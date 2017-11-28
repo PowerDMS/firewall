@@ -23,7 +23,7 @@ class Chef
     include FirewallCookbook::Helpers::Iptables
 
     provides :firewall, os: 'linux', platform_family: %w(rhel fedora) do |node|
-      node['platform_version'].to_f < 7.0 || node['firewall']['redhat7_iptables']
+      node['platform_version'].to_f < 7.0 || node['platform'] == 'amazon' || node['firewall']['redhat7_iptables']
     end
 
     def whyrun_supported?
@@ -86,7 +86,12 @@ class Chef
         types.each do |iptables_type|
           # build rules to apply with weight
           k = build_firewall_rule(node, firewall_rule, iptables_type == 'ip6tables')
-          v = firewall_rule.position
+          
+          unless k.include?("SNAT")
+            v = firewall_rule.position
+          else
+            v = firewall_rule.nat_position
+          end
 
           # unless we're adding them for the first time.... bail out.
           next if new_resource.rules[iptables_type].key?(k) && new_resource.rules[iptables_type][k] == v
